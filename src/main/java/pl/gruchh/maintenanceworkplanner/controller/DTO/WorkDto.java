@@ -10,6 +10,11 @@ public class WorkDto {
         this.workDuration = workDuration;
     }
 
+    public WorkDto(String name) {
+        this.name = name;
+        this.workDuration=2L;
+    }
+
     public String getName() {
         return name;
     }
