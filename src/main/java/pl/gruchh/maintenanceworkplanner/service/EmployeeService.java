@@ -7,6 +7,7 @@ import pl.gruchh.maintenanceworkplanner.repository.Entity.Breakdown;
 import pl.gruchh.maintenanceworkplanner.repository.Entity.Employee;
 import pl.gruchh.maintenanceworkplanner.repository.Entity.Phone;
 import pl.gruchh.maintenanceworkplanner.repository.Entity.WorkOrder;
+import pl.gruchh.maintenanceworkplanner.repository.WorkOrderRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -18,9 +19,11 @@ import java.util.Set;
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final WorkOrderRepository workOrderRepository;
 
-    public EmployeeService(EmployeeRepository employeeRepository) {
+    public EmployeeService(EmployeeRepository employeeRepository, WorkOrderRepository workOrderRepository) {
         this.employeeRepository = employeeRepository;
+        this.workOrderRepository = workOrderRepository;
 
         Phone phone1 = new Phone();
         phone1.setNumber(500123456L);
@@ -78,7 +81,7 @@ public class EmployeeService {
         workOrder3.setEmployee(employee2);
 
         employeeRepository.saveAll(Arrays.asList(employee1, employee2, employee3));
-//        workOrderRepository.saveAll(Arrays.asList(workOrder1, workOrder2, workOrder3));
+        workOrderRepository.saveAll(Arrays.asList(workOrder1, workOrder2, workOrder3));
     }
 
     public List<WorkDto> getAllWorksSummary() {
