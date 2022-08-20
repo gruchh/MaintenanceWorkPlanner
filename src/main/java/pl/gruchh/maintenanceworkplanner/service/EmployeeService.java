@@ -2,6 +2,7 @@ package pl.gruchh.maintenanceworkplanner.service;
 
 import org.springframework.stereotype.Service;
 import pl.gruchh.maintenanceworkplanner.controller.DTO.WorkDto;
+import pl.gruchh.maintenanceworkplanner.exception.EmployeeNotFoundException;
 import pl.gruchh.maintenanceworkplanner.repository.EmployeeRepository;
 import pl.gruchh.maintenanceworkplanner.repository.Entity.Breakdown;
 import pl.gruchh.maintenanceworkplanner.repository.Entity.Employee;
@@ -25,6 +26,20 @@ public class EmployeeService {
         this.employeeRepository = employeeRepository;
         this.workOrderRepository = workOrderRepository;
 
+        prepareDb(employeeRepository, workOrderRepository);
+    }
+
+    public List<WorkDto> getAllWorksSummary() {
+        return employeeRepository.getWorkOrderAndBreakdownDurationTime();
+    }
+
+    public Employee getEmployeeById(Long id) throws EmployeeNotFoundException {
+        Employee employee = employeeRepository.findById(id).orElseThrow(EmployeeNotFoundException::new);
+
+        return employee;
+    }
+
+    private void prepareDb(EmployeeRepository employeeRepository, WorkOrderRepository workOrderRepository) {
         Phone phone1 = new Phone();
         phone1.setNumber(500123456L);
 
@@ -84,7 +99,4 @@ public class EmployeeService {
         workOrderRepository.saveAll(Arrays.asList(workOrder1, workOrder2, workOrder3));
     }
 
-    public List<WorkDto> getAllWorksSummary() {
-        return employeeRepository.getWorkOrderAndBreakdownDurationTime();
-    }
 }
