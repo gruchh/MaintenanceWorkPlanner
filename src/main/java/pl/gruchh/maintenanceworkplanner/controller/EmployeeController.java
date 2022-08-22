@@ -1,16 +1,17 @@
 package pl.gruchh.maintenanceworkplanner.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.gruchh.maintenanceworkplanner.controller.DTO.EmployeeDto;
 import pl.gruchh.maintenanceworkplanner.controller.DTO.WorkDto;
 import pl.gruchh.maintenanceworkplanner.exception.EmployeeNotFoundException;
 import pl.gruchh.maintenanceworkplanner.repository.Entity.Employee;
 import pl.gruchh.maintenanceworkplanner.service.EmployeeService;
 
+import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
+
+import static pl.gruchh.maintenanceworkplanner.controller.mapper.EmployeeDtoMapper.getEmployeeDto;
 
 @RestController
 @RequestMapping("/api/v1/employees")
@@ -29,9 +30,26 @@ public class EmployeeController {
 
     @GetMapping("/{id}")
     public EmployeeDto getEmployeeById(@PathVariable("id") Long id) throws EmployeeNotFoundException {
-        Employee employeeById = employeeService.getEmployeeById(id);
+        return getEmployeeDto(employeeService.getEmployeeById(id));
+    }
 
-        return new EmployeeDto(employeeById.getId(), employeeById.getName(),employeeById.getSurname());
+    @PostMapping()
+    public Employee saveNewEmployee(@RequestBody @Valid EmployeeDto newEmployeeDto) {
+        Employee employee = new Employee();
+        employee.setName(newEmployeeDto.name());
+        employee.setSurname(newEmployeeDto.surname());
+        employee.setEditionDate(LocalDate.now());
+        return employeeService.saveNewEmployee(employee);
+    }
+
+    @PutMapping("/{id}")
+    public Employee  changeEmployeeDetails(@PathVariable("id") Long id, @RequestBody @Valid EmployeeDto employeeDto) {
+        Employee employee = new Employee();
+        employee.setId(id);
+        employee.setName(employeeDto.name());
+        employee.setSurname(employeeDto.surname());
+        employee.setDateOfEmployment(LocalDate.now());
+        return employeeService.updateEmployeeDetails(employee);
     }
 
 

@@ -39,6 +39,10 @@ public class EmployeeService {
         return employee;
     }
 
+    public Employee saveNewEmployee(Employee newEmployee) {
+        return employeeRepository.save(newEmployee);
+    }
+
     private void prepareDb(EmployeeRepository employeeRepository, WorkOrderRepository workOrderRepository) {
         Phone phone1 = new Phone();
         phone1.setNumber(500123456L);
@@ -63,6 +67,7 @@ public class EmployeeService {
         employee1.setName("Kuba");
         employee1.setSurname("Piątek");
         employee1.setDateOfEmployment(LocalDate.of(2020, 2, 1));
+        employee1.setEditionDate(LocalDate.of(2020, 2, 1));
         employee1.setSalary(BigDecimal.valueOf(5000));
         employee1.setPhone(phone1);
         employee1.setBreakdownSet(Set.of(breakdown1, breakdown2));
@@ -70,12 +75,15 @@ public class EmployeeService {
         employee2.setName("Marcin");
         employee2.setSurname("Sobota");
         employee2.setDateOfEmployment(LocalDate.of(2021, 9, 1));
+        employee2.setEditionDate(LocalDate.of(2021, 9, 1));
         employee2.setSalary(BigDecimal.valueOf(4600));
         employee2.setPhone(phone2);
         employee2.setBreakdownSet(Set.of(breakdown1));
 
         employee3.setName("Tadeusz");
         employee3.setSurname("Wtorek");
+        employee3.setDateOfEmployment(LocalDate.of(2022, 03, 03));
+        employee3.setEditionDate(LocalDate.of(2022, 03, 03));
 
         WorkOrder workOrder1 = new WorkOrder();
         workOrder1.setTitle("Obchód");
@@ -99,4 +107,7 @@ public class EmployeeService {
         workOrderRepository.saveAll(Arrays.asList(workOrder1, workOrder2, workOrder3));
     }
 
+    public Employee updateEmployeeDetails(Employee employee) {
+        return employeeRepository.save(employee);
+    }
 }
